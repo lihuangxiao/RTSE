@@ -1,0 +1,20 @@
+version: '3'
+services: 
+  name.service1:
+    image: ...
+    ports:
+      - "4001:4000"
+    links:
+            - "name.service2:service2"
+    volumes:
+      - file_here:file_in_container
+    working_dir: ...
+    entrypoint: make run
+  name.service2:
+    image: ...
+    ports:
+      - "8001:8000"
+    working_dir: ...
+    entrypoint: make run
+    extra_hosts:
+      - "host-name:ip/dns"

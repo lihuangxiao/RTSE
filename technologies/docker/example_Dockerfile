@@ -1,0 +1,31 @@
+FROM ...
+
+# Set up SSH key
+RUN mkdir -p /root/.ssh
+COPY .ssh/id_rsa /root/.ssh/id_rsa
+RUN chmod 700 /root/.ssh/id_rsa && \
+    echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config && \
+    ssh-agent $(ssh-add /root/.ssh/id_rsa)
+
+RUN mkdir /root/.aws
+COPY .aws/config /root/.aws/config
+COPY .aws/credentials /root/.aws/credentials
+
+# Set system to unicode (instead of ASCII), required for click to work
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+WORKDIR /home
+
+RUN git clone ...
+
+WORKDIR ...
+COPY ... ...
+
+RUN make init
+
+# Delete unneccesary files
+RUN rm -rf /root/.ssh
+RUN rm -rf /root/.aws
+
+EXPOSE 4000
